@@ -28,4 +28,4 @@ class HedgeFund:
                     self.short_shares -= cover_size
 
 
-            await asyncio.sleep(config.tick_duration)
+            await asyncio.sleep(0.01)

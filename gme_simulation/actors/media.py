@@ -24,7 +24,7 @@ class Media:
             else:
                 self.hype = False
 
-            await asyncio.sleep(config.tick_duration)
+            await asyncio.sleep(0.01)
 
     def is_hype(self):
         return self.hype

@@ -27,7 +27,8 @@ class RetailCluster:
 
             # Poisson process for buy orders
             if random.random() < (current_arrival_rate / 100.0):
-                size = random.randint(1, 10)
+                size = random.randint(50, 200)
+                # print(f"Retail cluster {self.id} is buying {size} shares.")
                 await self.market.order_queue.put(Order(self.id, 'buy', size))
                 self.holdings.append({'entry_price': self.market.price, 'size': size})
 
@@ -43,4 +44,4 @@ class RetailCluster:
                     self.pnl += (self.market.price - h['entry_price']) * h['size']
                     self.holdings.remove(h)
 
-            await asyncio.sleep(config.tick_duration)
+            await asyncio.sleep(0.01)

@@ -11,7 +11,7 @@ from visualization import LiveChart
 async def market_engine(market, ticks):
     for i in range(ticks):
         if i % 100 == 0: # Print progress
-            print(f"Tick {i}/{ticks}, Price: ${market.price:.2f}")
+            print(f"Tick {i}/{ticks}, Price: ${market.price:.4f}")
         await market.run_tick()
         await asyncio.sleep(0.01) # A small delay to allow UI to update
 
@@ -21,12 +21,11 @@ async def main():
 
     # Actors
     hedge_fund = HedgeFund(market)
-    retail_clusters = [RetailCluster(market, f"retail_{i}", media.is_hype) for i in range(10)] # 10 retail clusters
+    retail_clusters = [RetailCluster(market, f"retail_{i}", media.is_hype) for i in range(100)] # 100 retail clusters
     platform = Platform(market)
 
     # Visualization
     chart = LiveChart(market)
-    chart.non_blocking_show()
 
     # Spawn actor tasks
     actor_tasks = [
@@ -37,21 +36,21 @@ async def main():
     for retail in retail_clusters:
         actor_tasks.append(asyncio.create_task(retail.run()))
 
-    # Run the market engine
+    # Run the market engine and visualization
     engine_task = asyncio.create_task(market_engine(market, config.simulation_ticks))
 
-    # Let the simulation run
-    while not engine_task.done():
-        chart.update(None)
-        plt.pause(0.1) # Pause to allow plot to update
-        await asyncio.sleep(0.1)
+    chart.show()
+
+    await engine_task
 
     # Cancel actor tasks once the simulation is done
     for task in actor_tasks:
         task.cancel()
 
     print("Simulation finished.")
-    chart.update_final()
+    # Keep the final plot window open
+    plt.ioff()
+    plt.show()
 
 if __name__ == "__main__":
     try:
