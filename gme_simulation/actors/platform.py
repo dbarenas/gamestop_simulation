@@ -15,4 +15,4 @@ class Platform:
                 # Restriction is lifted once volatility subsides
                 self.market.buy_allowed = True
 
-            await asyncio.sleep(config.tick_duration)
+            await asyncio.sleep(0.01)

@@ -43,6 +43,7 @@ class Market:
                 sell_volume += order.size
 
         net_vol = buy_volume - sell_volume
+        # print(f"Net volume: {net_vol}")
         log_return = self.k * (net_vol / self.liquidity)
         old_price = self.price
         self.price = self.price * math.exp(log_return)
