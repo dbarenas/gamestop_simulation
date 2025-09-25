@@ -1,4 +1,5 @@
 import asyncio
+import os
 import matplotlib.pyplot as plt
 import config
 from market import Market
@@ -48,6 +49,11 @@ async def main():
         task.cancel()
 
     print("Simulation finished.")
+    # Create the output directory if it doesn't exist
+    output_dir = 'bloob'
+    os.makedirs(output_dir, exist_ok=True)
+    # Save the final plot to a file
+    plt.savefig(os.path.join(output_dir, 'gme_simulation_chart.png'))
     # Keep the final plot window open
     plt.ioff()
     plt.show()
